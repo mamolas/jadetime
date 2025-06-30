@@ -8,6 +8,7 @@
     canvas { margin: 1em 0; }
     pre { background: #f4f4f4; padding: 1em; border-radius: 5px; display: inline-block; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/cbor-js@0.1.0/cbor.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 </head>
 <body>
@@ -15,6 +16,29 @@
   <canvas id="qr"></canvas>
   <p>BC-UR string (scan with Jade):</p>
   <pre id="ur"></pre>
-  <script src="bundle.js"></script>
+  <script>
+    function toUR(type, cborBytes) {
+      let hex = "";
+      for (let b of cborBytes) hex += b.toString(16).padStart(2, "0");
+      return `ur:${type}/${hex}`;
+    }
+    window.onload = function () {
+      const now = Math.floor(Date.now() / 1000);
+      const cborObj = {
+        method: "set_epoch",
+        params: { timestamp: now }
+      };
+      const cborData = CBOR.encode(cborObj);
+      const urString = toUR("jade-msg", cborData);
+
+      document.getElementById("ur").textContent = urString;
+
+      new QRious({
+        element: document.getElementById("qr"),
+        value: urString,
+        size: 256
+      });
+    };
+  </script>
 </body>
 </html>
