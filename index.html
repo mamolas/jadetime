@@ -28,7 +28,8 @@
         method: "set_epoch",
         params: { timestamp: now }
       };
-      const cborData = CBOR.encode(cborObj);
+      // Convert ArrayBuffer to Uint8Array for iteration
+      const cborData = new Uint8Array(CBOR.encode(cborObj));
       const urString = toUR("jade-msg", cborData);
 
       document.getElementById("ur").textContent = urString;
