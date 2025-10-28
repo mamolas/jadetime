@@ -25,8 +25,9 @@
     window.onload = function () {
       const now = Math.floor(Date.now() / 1000);
       const cborObj = {
+        id: String(Math.floor(Math.random() * 1000000)),
         method: "set_epoch",
-        params: { timestamp: now }
+        params: { epoch: now }  // Fixed: changed from 'timestamp' to 'epoch'
       };
       // Convert ArrayBuffer to Uint8Array for iteration
       const cborData = new Uint8Array(CBOR.encode(cborObj));
